@@ -1,6 +1,6 @@
 {
   "name": "bun-allow-macros",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "description": "A dirty hack for run macros in node_modules",
   "keywords": [

@@ -1,4 +1,5 @@
 import type { BunPlugin, JavaScriptLoader } from "bun";
+import { join } from "node:path";
 
 function escapeRegExp(string: string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
@@ -20,6 +21,9 @@ export function AllowMacros(
         { filter: /.*/, namespace: "allow-macros" },
         async ({ path }) => {
           const final = Bun.fileURLToPath(resolve(path));
+          const fixIndex =
+            !path.endsWith("/index") && !!final.match(/\/index\.[tj]sx?$/);
+          const basedir = fixIndex ? path : path + "/..";
           let contents = await Bun.file(final).text();
           const loader = final.slice(
             final.lastIndexOf(".") + 1
@@ -27,10 +31,7 @@ export function AllowMacros(
           const imports = new Bun.Transpiler({ loader }).scanImports(contents);
           for (const imp of imports) {
             if (imp.path.startsWith(".")) {
-              contents = contents.replaceAll(
-                imp.path,
-                path.slice(0, path.lastIndexOf("/")) + "/" + imp.path
-              );
+              contents = contents.replaceAll(imp.path, join(basedir, imp.path));
             }
           }
           return { contents, loader };
@@ -63,6 +64,9 @@ export function AllowMacrosRuntime(
         { namespace: "allow-macros", filter: /.*/ },
         async ({ path }) => {
           const final = Bun.fileURLToPath(resolve(path));
+          const fixIndex =
+            !path.endsWith("/index") && !!final.match(/\/index\.[tj]sx?$/);
+          const basedir = fixIndex ? path : path + "/..";
           let contents = await Bun.file(final).text();
           const loader = final.slice(
             final.lastIndexOf(".") + 1
@@ -70,10 +74,7 @@ export function AllowMacrosRuntime(
           const imports = new Bun.Transpiler({ loader }).scanImports(contents);
           for (const imp of imports) {
             if (imp.path.startsWith(".")) {
-              contents = contents.replaceAll(
-                imp.path,
-                path.slice(0, path.lastIndexOf("/")) + "/" + imp.path
-              );
+              contents = contents.replaceAll(imp.path, join(basedir, imp.path));
             }
           }
           return { contents };
