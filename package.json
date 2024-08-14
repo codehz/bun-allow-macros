@@ -1,0 +1,21 @@
+{
+  "name": "bun-allow-macros",
+  "version": "0.0.4",
+  "type": "module",
+  "description": "A dirty hack for run macros in node_modules",
+  "keywords": [
+    "bun",
+    "macros"
+  ],
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "index.ts",
+    "tsconfig.json"
+  ]
+}
