@@ -7,6 +7,10 @@
     "bun",
     "macros"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codehz/bun-allow-macros.git"
+  },
   "module": "index.ts",
   "devDependencies": {
     "@types/bun": "latest"
